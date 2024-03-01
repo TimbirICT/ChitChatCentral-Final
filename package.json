@@ -15,5 +15,8 @@
     "url": "https://github.com/TimbirICT/ChitChatCentral"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
 }
