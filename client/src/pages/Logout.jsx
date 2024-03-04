@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react';
+import { Redirect } from 'react-router-dom';
 
 const Logout = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+  useEffect(() => {
+    localStorage.removeItem('token'); // Clear authentication token
+  }, []);
 
-export default Logout
+  // Redirect back to the login page after logout
+  return <Redirect to="/login" />;
+};
+
+export default Logout;
