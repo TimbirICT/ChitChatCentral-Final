@@ -1,25 +1,22 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Home from '../../client/src/pages/Home'
-import Messages from '../../client/src/pages/Messages'
-import Friends from '../../client/src/pages/Friends'
-import Logout from '../../client/src/pages/Logout'
-import Login from '../../client/src/pages/Login'
-
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import Messages from './pages/Messages';
+import Friends from './pages/Friends';
+import Logout from './pages/Logout';
+import Login from './pages/Login';
 
 function App() {
   return (
-    <div>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/messages"></Route>
-        <Route path="/friends" ></Route>
-        <Route path="/logout"></Route>
-        <Route path="/login" element={<Login />}></Route>
+        <Route path="/messages" element={<Messages />} />
+        <Route path="/friends" element={<Friends />} />
+        <Route path="/logout" element={<Logout />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
-    </div>
-  )
+  );
 }
 
 export default App
