@@ -2,6 +2,7 @@ import React from 'react';
 import Navbar from '../components/Navbar';
 
 
+
 const Friends = () => {
   // Sample data for friends list
   const friends = [
@@ -13,27 +14,23 @@ const Friends = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-800 to-gray-200">
+    <div>
+      <Navbar />
       <div className="container mx-auto py-6">
-        <h2 className="text-6xl font-extrabold mb-8 text-white">Friends</h2>
+        <h2 className="text-3xl font-semibold mb-6">Friends</h2>
         <div className="grid grid-cols-3 gap-4">
-          {friends.map(friend => (
+          {friends.map((friend) => (
             <div
               key={friend.id}
-              className="bg-gradient-to-r from-purple-500 to-indigo-500 p-4 rounded-md shadow-md flex flex-col justify-between"
+              className="bg-white p-4 rounded-md shadow-md flex items-center justify-between"
             >
-              <div className="mb-4">
-                <div className="flex items-center mb-2">
-                  <h3 className="text-xl font-semibold italic text-white mr-2">{friend.name}</h3>
-                  {friend.online ? (
-                    <div className="w-4 h-4 bg-green-500 rounded-full"></div>
-                  ) : (
-                    <div className="w-4 h-4 bg-red-500 rounded-full"></div>
-                  )}
-                </div>
-                <p className="text-gray-300">Status: {friend.online ? 'Online' : 'Offline'}</p>
+              <div>
+                <h3 className="text-xl font-semibold">{friend.name}</h3>
+                <p className="text-gray-500">Status: Online</p>
               </div>
-              <button className="border-2 border-black bg-white text-black px-4 py-2 rounded-md">Message</button>
+              <button className="bg-blue-500 text-white px-4 py-2 rounded-md">
+                Message
+              </button>
             </div>
           ))}
         </div>
@@ -41,5 +38,6 @@ const Friends = () => {
     </div>
   );
 };
+
 
 export default Friends;
