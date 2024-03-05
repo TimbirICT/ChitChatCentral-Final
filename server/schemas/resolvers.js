@@ -28,7 +28,8 @@ const resolvers = {
         createdAt: new Date().toISOString(),
       };
       messages.push(newMessage);
-      sendMessageToClients(newMessage); // Send the new message to all clients
+      pubsub.publish('MESSAGE_SENT', { messageSent: newMessage});
+      // sendMessageToClients(newMessage); // Send the new message to all clients
       return newMessage;
     },
   },
