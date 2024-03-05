@@ -1,33 +1,25 @@
-import PropTypes from 'prop-types';
+import React from 'react';
+import Footer from '../components/Footer'; 
+import Navbar from '../components/Navbar';
 
-const Header = ({ currentSection, handleNavigationClick }) => {
+const Home = () => {
   return (
-    <header className="bg-gray-800 text-white py-4">
-      <div className="container mx-auto flex justify-between items-center">
-        <h1 className="text-2xl font-bold">ChitChat Central</h1>
-        <nav>
-          <ul className="flex space-x-4">
-            {['Home', 'Friends', 'Messages', 'Logout'].map(section => (
-              <li
-                key={section}
-                className={`cursor-pointer ${
-                  currentSection === section ? 'text-blue-500' : 'hover:text-blue-500'
-                }`}
-                onClick={() => handleNavigationClick(section)}
-              >
-                {section}
-              </li>
-            ))}
-          </ul>
-        </nav>
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-purple-600 to-indigo-600">
+      <Navbar />
+      <div className="flex flex-col items-center justify-center flex-1">
+        <h1 className="text-4xl font-bold mb-8 text-white">Welcome to ChitChatCentral!</h1>
+        <div className="max-w-md w-full bg-white shadow-md rounded-md p-4">
+          {/* Your chatbox content goes here */}
+          <div className="bg-gray-100 p-4 rounded-md">
+            {/* Chatbox content */}
+          </div>
+        </div>
       </div>
-    </header>
+      <div>
+        <Footer />
+      </div>
+    </div>
   );
 };
 
-Header.propTypes = {
-  currentSection: PropTypes.string.isRequired,
-  handleNavigationClick: PropTypes.func.isRequired,
-};
-
-export default Header
+export default Home;
