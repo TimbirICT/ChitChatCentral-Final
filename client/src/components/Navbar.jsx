@@ -20,11 +20,11 @@ const Navbar = () => {
             <AiOutlineHome size={20} />
             <span className='pl-4'>Home</span>
           </a>
-          <a href="/messages" className='w-[50%] flex justify-center items-center rounded-full shadow-lg rounded-full m-2 p-3 cursor-pointer hover:scale-105 ease-in duration-200'>
+          <a href="/friends" className='w-[50%] flex justify-center items-center rounded-full shadow-lg rounded-full m-2 p-3 cursor-pointer hover:scale-105 ease-in duration-200'>
            <AiOutlineProject size={20} />
             <span className='pl-4'>Friends</span>
           </a>
-          <a href="/friends" className='w-[50%] flex justify-center items-center rounded-full shadow-lg rounded-full m-2 p-3 cursor-pointer hover:scale-105 ease-in duration-200'>
+          <a href="/messages" className='w-[50%] flex justify-center items-center rounded-full shadow-lg rounded-full m-2 p-3 cursor-pointer hover:scale-105 ease-in duration-200'>
             <AiOutlineMail size={20} /> 
             <span className='pl-4'>Messages</span>
           </a>

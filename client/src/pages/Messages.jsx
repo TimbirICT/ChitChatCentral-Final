@@ -1,8 +1,8 @@
 // import React, { useState, useEffect } from 'react';
 // import { useQuery, useMutation } from '@apollo/client';
-// import { GET_MESSAGES, SEND_MESSAGE } from '../graphql/messages'; // Import GraphQL queries and mutations
+// // import { GET_MESSAGES, SEND_MESSAGE } from '../graphql/messages'; // Import GraphQL queries and mutations
 
-// const Messages = () => {
+const Messages = () => {
 //   // State for storing messages and current message input
 //   const [messages, setMessages] = useState([]);
 //   const [messageInput, setMessageInput] = useState('');
@@ -75,6 +75,6 @@
 //       </div>
 //     </div>
 //   );
-// };
+ };
 
-// export default Messages;
+ export default Messages;

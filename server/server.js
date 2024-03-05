@@ -2,21 +2,30 @@ const express = require('express');
 const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
 const path = require('path');
-// const { authMiddleware } = require('./utils/auth');
+const { authMiddleware } = require('./utils/auth');
 
-const { typeDefs, resolvers } = require('../schemas');
+// Socket.io imports
+const http = require('http')
+
+const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
-const server = new ApolloServer({
+const server = http.createServer(app)
+const io = require("socket.io")(server);
+const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
 });
 
+io.on('connection', (socket) => {
+  console.log('a user connected');
+});
+
 // Create a new instance of an Apollo server with the GraphQL schema
 const startApolloServer = async () => {
-  await server.start();
+  await apolloServer.start();
 
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
@@ -24,7 +33,7 @@ const startApolloServer = async () => {
   // Serve up static assets
   // app.use('/images', express.static(path.join(__dirname, '../client/images')));
 
-  app.use('/graphql', expressMiddleware(server, {
+  app.use('/graphql', expressMiddleware(apolloServer, {
     context: authMiddleware
   }));
 
