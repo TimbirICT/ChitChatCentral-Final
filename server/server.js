@@ -3,25 +3,64 @@ const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
 const path = require('path');
 const { authMiddleware } = require('./utils/auth');
-
+const { typeDefs, resolvers } = require('./schemas');
+const { useServer } = require('graphql-ws/lib/use/ws');
+const { ApolloServerPluginDrainHttpServer } = require('@apollo/server/plugin/drainHttpServer');
+const { makeExecutableSchema } = require('@graphql-tools/schema');
+const { WebSocketServer } = require('ws');
+const { PubSub } = require('graphql-subscriptions');
+const pubsub = new PubSub();
 // Socket.io imports
 const http = require('http')
 
-const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
-const server = http.createServer(app)
-const io = require("socket.io")(server);
+const httpServer = http.createServer(app)
+const io = require("socket.io")(httpServer);
+const schema = makeExecutableSchema({ typeDefs, resolvers });
 const apolloServer = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema,
 });
+
+// Creating the WebSocket server
+const wsServer = new WebSocketServer({
+  // This is the `httpServer` we created in a previous step.
+  server: httpServer,
+  // Pass a different path here if app.use
+  // serves expressMiddleware at a different path
+  path: '/subscriptions',
+});
+
+const server = new ApolloServer({
+  schema,
+  plugins: [
+    // Proper shutdown for the HTTP server.
+    ApolloServerPluginDrainHttpServer({ httpServer }),
+
+    // Proper shutdown for the WebSocket server.
+    {
+      async serverWillStart() {
+        return {
+          async drainServer() {
+            await serverCleanup.dispose();
+          },
+        };
+      },
+    },
+  ],
+});
+
+// Hand in the schema we just created and have the
+// WebSocketServer start listening.
+const serverCleanup = useServer({ schema }, wsServer);
+
 
 io.on('connection', (socket) => {
   console.log('a user connected');
 });
+
 
 // Create a new instance of an Apollo server with the GraphQL schema
 const startApolloServer = async () => {
