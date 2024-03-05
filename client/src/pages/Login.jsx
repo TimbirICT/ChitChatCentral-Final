@@ -6,21 +6,22 @@ const Login = () => {
   return (
     <div>
       <Navbar />
-      <div id='main'>
-        <div className='w-full h-screen absolute top-0 left-0 bg-white/50'>
+      <div id='main' className='bg-red-600 h-screen'>
+        <div className='w-full h-screen absolute top-0 left-0'>
           <div className='max-w-[700px] m-auto h-full w-full flex flex-col justify-center lg:items-start items-center'>
-            <h1 className='sm:text-5xl text-3xl font-bold text-red'>Welcome to ChitChat Central</h1>
-            <h2 className='flex sm:text-3xl text-4xl pt-6 text-gray-800'>
+            <h1 className='sm:text-5xl text-3xl font-bold text-blue-600'>
+              Welcome to ChitChat Central
+            </h1>
+            <h2 className='flex sm:text-3xl text-4xl pt-6 text-blue-600'>
               The Next
               <TypeAnimation
                 sequence={[
-                  // Same substring at the start will only be typed out once, initially
                   'Hotspot',
-                  1000, // wait 1s before replacing
+                  1000,
                   'Messenger',
-                  1000, // wait 1s before replacing
-                  'connection',
-                  1000, // wait 1s before replacing
+                  1000,
+                  'Connection',
+                  1000,
                 ]}
                 wrapper='div'
                 cursor={true}
@@ -29,11 +30,41 @@ const Login = () => {
                 repeat={Infinity}
               />
             </h2>
-            </div>
+            {/* Login Form */}
+            <form className='mt-8 max-w-md w-full'>
+              <div className='grid grid-cols-1 gap-6'>
+                <label className='block text-sm font-medium text-blue-600'>
+                  Email Address
+                </label>
+                <input
+                  type='email'
+                  className='mt-1 p-2 border rounded-md w-full'
+                  placeholder='you@example.com'
+                />
+              </div>
+              <div className='grid grid-cols-1 gap-6 mt-4'>
+                <label className='block text-sm font-medium text-blue-600'>
+                  Password
+                </label>
+                <input
+                  type='password'
+                  className='mt-1 p-2 border rounded-md w-full'
+                  placeholder='********'
+                />
+              </div>
+              <div className='mt-6'>
+                <button
+                  type='submit'
+                  className='w-full p-2 bg-blue-600 text-red-600 rounded-md'
+                >
+                  Log In
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
-   
+    </div>
   );
 };
 
