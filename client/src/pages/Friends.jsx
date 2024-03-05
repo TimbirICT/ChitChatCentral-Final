@@ -1,7 +1,6 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 
-import React from 'react';
 
 const Friends = () => {
   // Sample data for friends list
