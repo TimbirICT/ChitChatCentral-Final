@@ -1,80 +1,79 @@
-// import React, { useState, useEffect } from 'react';
-// import { useQuery, useMutation } from '@apollo/client';
-// // import { GET_MESSAGES, SEND_MESSAGE } from '../graphql/messages'; // Import GraphQL queries and mutations
+// Messages.js
+import React, { useState } from 'react';
+import Navbar from '../components/Navbar'
 
 const Messages = () => {
-//   // State for storing messages and current message input
-//   const [messages, setMessages] = useState([]);
-//   const [messageInput, setMessageInput] = useState('');
-//   const [loading, setLoading] = useState(false);
-//   const [error, setError] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
 
-//   // GraphQL query to fetch messages
-//   const { data } = useQuery(GET_MESSAGES, {
-//     onError: error => setError(error),
-//     onCompleted: () => setLoading(false),
-//     fetchPolicy: 'cache-and-network',
-//   });
+  const handleInputChange = (e) => {
+    setNewMessage(e.target.value);
+  };
 
-//   // GraphQL mutation to send a message
-//   const [sendMessageMutation] = useMutation(SEND_MESSAGE, {
-//     onError: error => setError(error),
-//     onCompleted: () => setLoading(false),
-//   });
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-//   // Function to handle sending a message
-//   const handleSendMessage = async () => {
-//     if (messageInput.trim() !== '') {
-//       setLoading(true);
-//       setError(null);
-//       try {
-//         await sendMessageMutation({ variables: { content: messageInput } });
-//         setMessageInput(''); // Clear message input after sending
-//       } catch (error) {
-//         setError(error);
-//         setLoading(false);
-//         console.error('Error sending message:', error);
-//       }
-//     }
-//   };
+    if (newMessage.trim() === '') {
+      return; // Don't add empty messages
+    }
 
-//   // Effect to update messages when data changes
-//   useEffect(() => {
-//     if (data && data.messages) {
-//       setMessages(data.messages);
-//     }
-//   }, [data]);
+    // Add the new message to the messages state
+    setMessages((prevMessages) => [...prevMessages, { text: newMessage, type: 'user' }]);
 
-//   return (
-//     <div>
-//       {/* Render conversation UI with messages */}
-//       <div className="conversation">
-//         {loading ? (
-//           <p>Loading messages...</p>
-//         ) : error ? (
-//           <p>Error fetching messages: {error.message}</p>
-//         ) : (
-//           messages.map(message => (
-//             <div key={message.id} className="message">
-//               <p>{message.content}</p>
-//               {/* Render sender, timestamp, etc. */}
-//             </div>
-//           ))
-//         )}
-//       </div>
+    // Simulate a response from the server (in this example, a simple echo)
+    setTimeout(() => {
+      setMessages((prevMessages) => [...prevMessages, { text: `You said: ${newMessage}`, type: 'bot' }]);
+    }, 500);
 
-//       {/* Message input field and send button */}
-//       <div className="message-input">
-//         <input
-//           type="text"
-//           value={messageInput}
-//           onChange={e => setMessageInput(e.target.value)}
-//           placeholder="Type your message..."
-//         />
-//         <button onClick={handleSendMessage} disabled={loading}>Send</button>
-//       </div>
-//     </div>
-//   );
- };
+    // Clear the input field
+    setNewMessage('');
+  };
 
- export default Messages;
+  return (
+    <div>
+      <Navbar />
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-500 to-blue-500">
+        <div className="w-full max-w-2xl mx-auto mt-8 p-4 rounded-md shadow-md bg-gradient-to-br from-red-500 to-blue-500">
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold mb-4 text-white">Conversation Form</h2>
+            <div className="max-h-96 overflow-y-auto border border-gray-300 p-2 bg-white bg-opacity-50 rounded-md">
+              {messages.length === 0 ? (
+                <p className="text-center text-gray-500">No messages yet.</p>
+              ) : (
+                messages.map((message, index) => (
+                  <div
+                    key={index}
+                    className={`p-2 text-sm ${
+                      message.type === 'user' ? 'text-right text-blue-600' : 'text-left text-green-600'
+                    }`}
+                  >
+                    {messages.text}
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+          <form onSubmit={handleSubmit}>
+            <label className="block mb-2 text-white">
+              Your Message:
+              <input
+                type="text"
+                value={newMessage}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 p-2 rounded-md"
+              />
+            </label>
+            <button
+              type="submit"
+              className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
+            >
+              Send
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Messages;
