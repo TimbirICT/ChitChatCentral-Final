@@ -12,13 +12,21 @@ const { PubSub } = require('graphql-subscriptions');
 const pubsub = new PubSub();
 // Socket.io imports
 const http = require('http')
+const cors = require('cors');
 
 const db = require('./config/connection');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
 const httpServer = http.createServer(app)
-const io = require("socket.io")(httpServer);
+const io = require('socket.io')(httpServer, {
+  cors: {
+    origin: 'http://localhost:3000/messages',
+    methods: ['GET', 'POST'],
+    credentials: true  // Allow cookies, if applicable
+  }
+});
+
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 const apolloServer = new ApolloServer({
   schema,
