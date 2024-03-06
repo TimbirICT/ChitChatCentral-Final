@@ -42,7 +42,7 @@ const Logout = () => {
             >
               Logout
             </button>
-            <Link to="/" className="text-blue-500 mt-2">Back to Home</Link>
+            <Link to="/login" className="text-blue-500 mt-2">Back to Login</Link>
           </>
         )}
         {loggedOut && (
