@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Messages from './pages/Messages';
 import Friends from './pages/Friends';
 import Logout from './pages/Logout';
+import Signup from './pages/Signup';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/messages" element={<Messages />} />
         <Route path="/friends" element={<Friends />} />
         <Route path="/logout" element={<Logout />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
     </BrowserRouter>
   );
