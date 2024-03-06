@@ -35,3 +35,35 @@ export const ADD_FRIEND = gql`
     }
   }
 `;
+
+export const REMOVE_FRIEND = gql`
+  mutation removeFriend($username: String!, $_id: String!) {
+    removeFriend(username: $username, _id: $_id) {
+      user {
+        _id
+        username
+      }
+    }
+  }
+`;
+
+export const SEND_MESSAGE = gql`
+  mutation sendMessage($messageId: ID!, $messageText: String!) {
+    sendMessage(messageId: $messageId, messageText: $messageText) {
+      _id
+      messageText
+      messageAuthor
+      createdAt
+  }
+`;
+
+export const GET_MESSAGE = gql`
+  mutation getMessage($messageId: ID!, $messageText: String!) {
+    getMessage(messageId: $messageId, messageText: $messageText) {
+      _id
+      messageText
+      messageAuthor
+      createdAt
+    }
+  }
+`;
