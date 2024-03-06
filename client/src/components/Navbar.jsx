@@ -28,6 +28,10 @@ const Navbar = () => {
             <AiOutlineMail size={20} /> 
             <span className='pl-4'>Messages</span>
           </a>
+          <a href="/login" className='w-[50%] flex justify-center items-center rounded-full shadow-lg rounded-full m-2 p-3 cursor-pointer hover:scale-105 ease-in duration-200'>
+            <BsPerson size={20} />
+            <span className='pl-4'>Login</span>
+          </a>
           <a href="/logout" className='w-[50%] flex justify-center items-center rounded-full shadow-lg rounded-full m-2 p-3 cursor-pointer hover:scale-105 ease-in duration-200'>
             <BsPerson size={20} />
             <span className='pl-4'>Logout</span>
