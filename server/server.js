@@ -16,8 +16,13 @@ const cors = require('cors');
 
 const db = require('./config/connection');
 
+const userRoutes = require("./routes/userRoutes");
+
 const PORT = process.env.PORT || 3001;
 const app = express();
+// Setting up our user auth routes
+app.use('/users', userRoutes);
+
 const httpServer = http.createServer(app)
 const io = require('socket.io')(httpServer, {
   cors: {
