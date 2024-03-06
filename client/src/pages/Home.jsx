@@ -36,10 +36,6 @@ const Home = () => {
               <div className="flex items-center">
                 <img src={profileImage} alt="Profile" className="h-22 w-22 rounded-full mr-3" />
               </div>
-              {/* Button linking to Edit Profile */}
-              <Link to="/edit-profile">
-                <button className="bg-purple-600 text-white px-4 py-2 rounded-md">Edit Profile</button>
-              </Link>
             </div>
           </div>
           {/* Messaging Section Access */}
