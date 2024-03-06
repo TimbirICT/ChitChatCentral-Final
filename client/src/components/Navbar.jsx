@@ -27,6 +27,10 @@ const Navbar = () => {
           <a href="/messages" className='w-[50%] flex justify-center items-center rounded-full shadow-lg rounded-full m-2 p-3 cursor-pointer hover:scale-105 ease-in duration-200'>
             <AiOutlineMail size={20} /> 
             <span className='pl-4'>Messages</span>
+          </a> 
+          <a href="/signup" className='w-[50%] flex justify-center items-center rounded-full shadow-lg rounded-full m-2 p-3 cursor-pointer hover:scale-105 ease-in duration-200'>
+            <BsPerson size={20} />
+            <span className='pl-4'>Sign Up</span>
           </a>
           <a href="/login" className='w-[50%] flex justify-center items-center rounded-full shadow-lg rounded-full m-2 p-3 cursor-pointer hover:scale-105 ease-in duration-200'>
             <BsPerson size={20} />
@@ -36,6 +40,7 @@ const Navbar = () => {
             <BsPerson size={20} />
             <span className='pl-4'>Logout</span>
           </a>
+         
         </div>
       ) : (
        ''
