@@ -1,3 +1,6 @@
+const User = require('../models/User');
+const Friend = require('../models/Friend');
+const { signToken, AuthenticationError } = require('../utils/auth');
 // Import necessary libraries
 const { PubSub } = require('graphql-subscriptions');
 const pubsub = new PubSub();
@@ -17,9 +20,74 @@ const sendMessageToClients = (message) => {
 
 const resolvers = {
   Query: {
+    users: async () => {
+      return User.find();
+    },
+
+    user: async (parent, { userId }) => {
+      return User.find({ id: userId });
+    },
+
+    me: async (parent, args, context) => {
+      if (context.user) {
+        return User.findOne({ id: context.user.id });
+      }
+      throw AuthenticationError;
+    },
+
     getMessages: () => messages,
   },
   Mutation: {
+    createUser: async (parent, { username, email, password }) => {
+      const user = await User.create({ username, email, password });
+      const token = signToken(user);
+      console.log(user, token);
+      return { token, user };
+    },
+    login: async (parent, { email, password }) => {
+      const user = await User.findOne({ email });
+
+      const correctPw = await user.isCorrectPassword(password);
+
+      if (!user || !correctPw) {
+        console.log('Log in unsuccesful');
+
+        return {
+          success: false,
+          message: 'Invalid credentials. Unable to log in.',
+        };
+      } else {
+        const token = signToken(user);
+
+        console.log('Log in succesful');
+
+        return {
+          success: true,
+          message: 'Successfully logged in!',
+          user,
+          token,
+        };
+      }
+    },
+    addFriend: async (_, { friendInput }, context) => {
+      if (context.user) {
+        // Create a new Friend object with the appropriate data
+        const newFriend = new Friend({
+          // Populate this with the necessary fields
+          user: context.user.id,
+          // Other friend-related fields
+        });
+
+        // Update the user's friends array
+        await User.findByIdAndUpdate(context.user.id, {
+          $push: { friends: newFriend },
+        });
+
+        return newFriend;
+      }
+
+      throw AuthenticationError;
+    },
     sendMessage: (_, { username, content }) => {
       const newMessage = {
         id: String(messages.length + 1),

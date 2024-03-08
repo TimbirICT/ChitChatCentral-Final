@@ -3,7 +3,46 @@ import React from 'react';
 import { TypeAnimation } from 'react-type-animation';
 import Navbar from '../components/Navbar';
 
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+
+import { useMutation } from '@apollo/client';
+import { ADD_USER } from '../utils/mutations';
+
+import Auth from '../utils/auth';
+
 const Signup = () => {
+  const [formState, setFormState] = useState({
+    username: '',
+    email: '',
+    password: '',
+  });
+  const [addUser, { error, data }] = useMutation(ADD_USER);
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    setFormState({
+      ...formState,
+      [name]: value,
+    });
+  };
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    console.log(formState);
+
+    try {
+      const { data } = await addUser({
+        variables: { ...formState },
+      });
+      console.log(data);
+      Auth.login(data.addUser.token);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <div className="bg-gradient-to-br from-purple-900 via-purple-500 to-blue-400 min-h-screen">
       <Navbar />
@@ -24,15 +63,24 @@ const Signup = () => {
             />
           </h2>
           {/* Signup Form */}
-          <form className="mt-8">
+          {data ? (
+              <p>
+              Success! You may now head{' '}
+              <Link to="/">back to the homepage.</Link>
+            </p>
+          ) : (
+            <form onSubmit={handleFormSubmit} className="mt-8">
             <div className="grid grid-cols-1 gap-6">
               <label className="block text-lg font-medium text-gold">
                 Name:
               </label>
               <input
+                name="username"
                 type="text"
                 className="mt-1 p-3 border border-gold rounded-md w-full focus:outline-none focus:ring focus:ring-gold"
                 placeholder="John Doe"
+                value={formState.name}
+                onChange={handleChange}
               />
             </div>
             <div className="grid grid-cols-1 gap-6 mt-4">
@@ -40,9 +88,12 @@ const Signup = () => {
                 Email Address:
               </label>
               <input
+                name="email"
                 type="email"
                 className="mt-1 p-3 border border-gold rounded-md w-full focus:outline-none focus:ring focus:ring-gold"
                 placeholder="you@example.com"
+                value={formState.email}
+                onChange={handleChange}
               />
             </div>
             <div className="grid grid-cols-1 gap-6 mt-4">
@@ -50,9 +101,12 @@ const Signup = () => {
                 Password:
               </label>
               <input
+                name="password"
                 type="password"
                 className="mt-1 p-3 border border-gold rounded-md w-full focus:outline-none focus:ring focus:ring-gold"
                 placeholder="********"
+                value={formState.password}
+                onChange={handleChange}
               />
             </div>
             <div className="grid grid-cols-1 gap-6 mt-4">
@@ -74,6 +128,13 @@ const Signup = () => {
               </button>
             </div>
           </form>
+          )}
+
+          {error && (
+            <div className="my-3 p-3 bg-danger text-white">
+              {error.message}
+            </div>
+          )}
         </div>
       </div>
     </div>
