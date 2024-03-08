@@ -1,12 +1,14 @@
 import React from 'react';
 import { TypeAnimation } from 'react-type-animation';
 import Navbar from '../components/Navbar';
+
 import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../utils/mutations';
 import { Link } from 'react-router-dom';
 
 import Auth from '../utils/auth';
+
 
 const Login = () => {
   const [formState, setFormState] = useState({ email: '', password: '' });
@@ -96,7 +98,7 @@ const Login = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="mt-6">
+            <div className="mt-6 flex justify-between"> {/* Added flex and justify-between */}
               <button
                 type="submit"
                 style={{ cursor: 'pointer' }}
@@ -104,6 +106,12 @@ const Login = () => {
               >
                 Log In
               </button>
+              {/* Button linking to Signup */}
+              <Link to="/signup">
+                <button className="w-full p-3 bg-blue-500 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300">
+                  Sign Up
+                </button>
+              </Link>
             </div>
           </form>
           )}
