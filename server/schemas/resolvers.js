@@ -1,8 +1,7 @@
 const User = require('../models/User');
+const { Types } = require('mongoose');
 const { signToken, AuthenticationError } = require('../utils/auth');
 const { PubSub } = require('graphql-subscriptions');
-// Import necessary libraries
-
 const pubsub = new PubSub();
 
 // Define a list to store messages
@@ -25,14 +24,28 @@ const resolvers = {
     },
 
     user: async (parent, { username }) => {
-      return await User.findOne({ username: username })
-        .populate({ 
-          path: "user", 
-          Model: "User",
-        },
-        {
-          strictPopulate: false
-        });
+      try {
+        const user = await User.findOne({ username });
+    
+        if (!user) {
+          return null;
+        }
+    
+        // Convert ObjectId to string
+        const userIdString = Types.ObjectId(user._id).toString();
+    
+        return {
+          ...user.toObject(),
+          _id: userIdString,
+          friends: user.friends.map(friend => ({
+            ...friend.toObject(),
+            _id: Types.ObjectId(friend._id).toString(),
+          })),
+        };
+      } catch (error) {
+        console.error('Error fetching user:', error);
+        return null;
+      }
     },
 
     me: async (parent, args, context) => {
@@ -48,34 +61,57 @@ const resolvers = {
     createUser: async (parent, { username, email, password }) => {
       const user = await User.create({ username, email, password });
       const token = signToken(user);
-      console.log(user, token);
       return { token, user };
     },
     login: async (parent, { email, password }) => {
-      const user = await User.findOne({ email });
-
-      const correctPw = await user.isCorrectPassword(password);
-
-      if (!user || !correctPw) {
-        console.log('Log in unsuccesful');
-
-        return {
-          success: false,
-          message: 'Invalid credentials. Unable to log in.',
-        };
-      } else {
+      try {
+        const user = await User.findOne({ email });
+    
+        if (!user) {
+          return {
+            success: false,
+            message: 'User not found.',
+          };
+        }
+    
+        const correctPw = await user.isCorrectPassword(password);
+    
+        if (!correctPw) {
+          return {
+            success: false,
+            message: 'Invalid password.',
+          };
+        }
+    
         const token = signToken(user);
-
-        console.log('Log in succesful');
-
+    
+        // Extract necessary fields from the user
+        const sanitizedUser = {
+          _id: user._id.toString(),
+          username: user.username,
+          email: user.email,
+          friends: user.friends && user.friends.map(friend => ({
+            _id: friend._id.toString(),
+            username: friend.username,
+          })),
+        };
+    
         return {
           success: true,
           message: 'Successfully logged in!',
-          user,
+          user: sanitizedUser,
           token,
+        };
+      } catch (error) {
+        console.error('Login error:', error);
+        return {
+          success: false,
+          message: 'An error occurred during login.',
         };
       }
     },
+    
+    
     // addFriend: async (_, { user1, user2 }, context) => {
     //   if (context.user) {
     //     // Create a new Friend object with the appropriate data
@@ -96,11 +132,32 @@ const resolvers = {
     //   throw AuthenticationError;
     // },
     addFriend: async (_, { myId, friendId }, context) => {
-      return (await User.findOneAndUpdate(
-        { _id: myId },
-        { $addToSet: { friends: friendId }},
-        {new: true }
-      )).populate("User")
+      try {
+        const updatedUser = await User.findOneAndUpdate(
+          { _id: myId },
+          { $addToSet: { friends: friendId } },
+          { new: true }
+        ).populate('friends'); // Populate the 'friends' field
+    
+        if (!updatedUser) {
+          return {
+            success: false,
+            message: 'User not found.',
+          };
+        }
+    
+        return {
+          success: true,
+          message: 'Friend added successfully.',
+          user: updatedUser.toObject(),
+        };
+      } catch (error) {
+        console.error('Error adding friend:', error);
+        return {
+          success: false,
+          message: 'An error occurred while adding a friend.',
+        };
+      }
     },
     sendMessage: (_, { username, content }) => {
       const newMessage = {

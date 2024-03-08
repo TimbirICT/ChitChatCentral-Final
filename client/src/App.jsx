@@ -1,3 +1,5 @@
+// app.jsx
+import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import {
   ApolloClient,
@@ -12,8 +14,6 @@ import Conversations from './pages/Conversations';
 import Friends from './pages/Friends';
 import Logout from './pages/Logout';
 import Signup from './pages/Signup';
-import Conversations from './pages/Conversations';
-
 
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
@@ -40,23 +40,26 @@ const client = new ApolloClient({
 });
 
 function App() {
+  const [user, setUser] = useState(null);
+
+  const updateUser = (userData) => {
+    setUser(userData);
+  };
+
   return (
     <ApolloProvider client={client}>
-     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/Conversations" element={<Conversations />} />
-        <Route path="/friends" element={<Friends />} />
-        <Route path="/logout" element={<Logout />} />
-        <Route path="/signup" element={<Signup />} />
-        {<Route path="/conversations" element={<Conversations />} />}
-
-      </Routes>
-     </BrowserRouter>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home user={user} />} />
+          <Route path="/login" element={<Login updateUser={updateUser} />} />
+          <Route path="/conversations" element={<Conversations />} />
+          <Route path="/friends" element={<Friends />} />
+          <Route path="/logout" element={<Logout />} />
+          <Route path="/signup" element={<Signup />} />
+        </Routes>
+      </BrowserRouter>
     </ApolloProvider>
   );
 }
 
 export default App;
- 

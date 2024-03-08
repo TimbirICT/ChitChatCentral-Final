@@ -1,10 +1,11 @@
 import React from 'react';
-import Footer from '../components/Footer'; 
+import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link } from 'react-router-dom';
 import profileImage from '../assets/images/profile.jpg';
+import PropTypes from 'prop-types';
 
-const Home = () => {
+const Home = ({ user }) => {
   // Sample data for recent messages and friends list
   const recentMessages = [
     { id: 1, sender: 'Dylan Smith', message: 'Hey, what\'s up?' },
@@ -19,6 +20,15 @@ const Home = () => {
     { id: 4, name: 'Jon Brown' },
   ];
 
+  Home.propTypes = {
+    user: PropTypes.shape({
+      _id: PropTypes.string,
+      username: PropTypes.string,
+      email: PropTypes.string,
+      messages: PropTypes.arrayOf(PropTypes.object),
+    }),
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-purple-600 to-indigo-600">
       <Navbar />
@@ -29,8 +39,10 @@ const Home = () => {
           <div className="flex flex-col border-b-2 border-gray-200 pb-4 mb-4">
             {/* User Profile Title */}
             <h2 className="text-2xl font-extrabold mb-4 text-black">User Profile:</h2>
-            {/* Welcome Back, Sara */}
-            <p className="text-2xl font-bold" style={{backgroundImage: 'linear-gradient(to right, #ff00cc, #333399)', WebkitBackgroundClip: 'text', color: 'transparent'}}>Welcome back, Sara!</p>
+            {/* Welcome Back, dynamic username */}
+            <p className="text-2xl font-bold" style={{ backgroundImage: 'linear-gradient(to right, #ff00cc, #333399)', WebkitBackgroundClip: 'text', color: 'transparent' }}>
+              Welcome back, {user ? user.username : 'Guest'}!
+            </p>
             {/* User Profile Image and Edit Profile Button */}
             <div className="flex items-center justify-between">
               <div className="flex items-center">
