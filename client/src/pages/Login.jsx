@@ -1,6 +1,7 @@
 import React from 'react';
 import { TypeAnimation } from 'react-type-animation';
 import Navbar from '../components/Navbar';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
 const Login = () => {
   return (
@@ -44,13 +45,19 @@ const Login = () => {
                 placeholder="********"
               />
             </div>
-            <div className="mt-6">
+            <div className="mt-6 flex justify-between"> {/* Added flex and justify-between */}
               <button
                 type="submit"
                 className="w-full p-3 bg-gold text-purple-800 rounded-md hover:bg-purple-600 focus:outline-none focus:ring focus:ring-purple-500"
               >
                 Log In
               </button>
+              {/* Button linking to Signup */}
+              <Link to="/signup">
+                <button className="w-full p-3 bg-blue-500 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300">
+                  Sign Up
+                </button>
+              </Link>
             </div>
           </form>
         </div>
