@@ -1,8 +1,9 @@
 const User = require('../models/User');
 const Friend = require('../models/Friend');
 const { signToken, AuthenticationError } = require('../utils/auth');
-// Import necessary libraries
 const { PubSub } = require('graphql-subscriptions');
+// Import necessary libraries
+
 const pubsub = new PubSub();
 
 // Define a list to store messages

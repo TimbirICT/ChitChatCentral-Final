@@ -12,6 +12,7 @@ import Messages from './pages/Messages';
 import Friends from './pages/Friends';
 import Logout from './pages/Logout';
 import Signup from './pages/Signup';
+import Conversations from './pages/Conversations';
 
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
@@ -48,6 +49,7 @@ function App() {
         <Route path="/friends" element={<Friends />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/conversations" element={<Conversations />} />
       </Routes>
      </BrowserRouter>
     </ApolloProvider>
@@ -55,3 +57,4 @@ function App() {
 }
 
 export default App;
+ 
