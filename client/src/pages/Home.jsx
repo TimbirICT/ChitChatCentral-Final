@@ -45,8 +45,8 @@ const Home = () => {
               <p className="text-gray-600">Start chatting with your friends!</p>
             </div>
             {/* Button linking to Messages */}
-            <Link to="/messages">
-              <button className="bg-purple-600 text-white px-4 py-2 rounded-md">Go to Messages</button>
+            <Link to="/friends">
+              <button className="bg-purple-600 text-white px-4 py-2 rounded-md">Start Chat<br />With A Friend</button>
             </Link>
           </div>
           {/* Recent Messages Section */}
