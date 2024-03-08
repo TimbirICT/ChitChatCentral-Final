@@ -46,12 +46,12 @@ const Messages = () => {
       ...prevMessages,
       { sender: 'You', message: newMessage },
     ]);
-  
-    // Clear the input field
-    setNewMessage("");
-  
+   
     // Send the message to the server
     socket.emit("sendMessage", { sender: 'You', message: newMessage });
+
+    // Clear the input field
+    setNewMessage("");
   
     // Simulate a response from the server (in this example, a simple echo)
     setTimeout(() => {
