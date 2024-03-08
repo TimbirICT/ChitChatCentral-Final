@@ -33,9 +33,9 @@ const io = require('socket.io')(httpServer, {
 });
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
-const apolloServer = new ApolloServer({
-  schema,
-});
+// const apolloServer = new ApolloServer({
+//   schema,
+// });
 
 // Creating the WebSocket server
 const wsServer = new WebSocketServer({
@@ -77,7 +77,7 @@ io.on('connection', (socket) => {
 
 // Create a new instance of an Apollo server with the GraphQL schema
 const startApolloServer = async () => {
-  await apolloServer.start();
+  await server.start();
 
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
@@ -85,7 +85,7 @@ const startApolloServer = async () => {
   // Serve up static assets
   // app.use('/images', express.static(path.join(__dirname, '../client/images')));
 
-  app.use('/graphql', expressMiddleware(apolloServer, {
+  app.use('/graphql', expressMiddleware(server, {
     context: authMiddleware
   }));
 

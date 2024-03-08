@@ -13,8 +13,8 @@ export const LOGIN_USER = gql`
 `;
 
 export const ADD_USER = gql`
-  mutation addUser($username: String!, $email: String!, $password: String!) {
-    addUser(username: $username, email: $email, password: $password) {
+  mutation createUser($username: String!, $email: String!, $password: String!) {
+    createUser(username: $username, email: $email, password: $password) {
       token
       user {
         _id
@@ -47,15 +47,15 @@ export const REMOVE_FRIEND = gql`
   }
 `;
 
-export const SEND_MESSAGE = gql`
-  mutation sendMessage($messageId: ID!, $messageText: String!) {
-    sendMessage(messageId: $messageId, messageText: $messageText) {
-      _id
-      messageText
-      messageAuthor
-      createdAt
-  }
-`;
+// export const SEND_MESSAGE = gql`
+//   mutation sendMessage($messageId: ID!, $messageText: String!) {
+//     sendMessage(messageId: $messageId, messageText: $messageText) {
+//       _id
+//       messageText
+//       messageAuthor
+//       createdAt
+//   }
+// `;
 
 export const GET_MESSAGE = gql`
   mutation getMessage($messageId: ID!, $messageText: String!) {
