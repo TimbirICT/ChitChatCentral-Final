@@ -1,18 +1,13 @@
 const typeDefs = `
   type User {
-    id: ID
+    _id: ID
     username: String
     email: String
     password: String
-    friends: [Friend]
+    friends: [User]
     Message: [Message]
   }
 
-  type Friend {
-    id: ID!
-    user: User!
-  }
-  
   type Message {
     id: ID!
     user: User!
@@ -27,16 +22,16 @@ const typeDefs = `
   
   type Query {
     users: [User]!
-    user(userId: ID!): User
+    user(username: String!): User
     me: User
-    friends: [Friend]!
+    friends: [User]!
     getMessages: [Message!]!
   }
   
   type Mutation {
     createUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
-    addFriend(id: ID!): Friend
+    addFriend(myId: ID!, friendId: ID!): User
     sendMessage(username: String!, content: String!): Message!
   }
   

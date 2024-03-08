@@ -1,5 +1,4 @@
 const User = require('../models/User');
-const Friend = require('../models/Friend');
 const { signToken, AuthenticationError } = require('../utils/auth');
 const { PubSub } = require('graphql-subscriptions');
 // Import necessary libraries
@@ -22,16 +21,23 @@ const sendMessageToClients = (message) => {
 const resolvers = {
   Query: {
     users: async () => {
-      return User.find();
+      return await User.find();
     },
 
-    user: async (parent, { userId }) => {
-      return User.find({ id: userId });
+    user: async (parent, { username }) => {
+      return await User.findOne({ username: username })
+        .populate({ 
+          path: "user", 
+          Model: "User",
+        },
+        {
+          strictPopulate: false
+        });
     },
 
     me: async (parent, args, context) => {
       if (context.user) {
-        return User.findOne({ id: context.user.id });
+        return await User.findOne({ id: context.user.id });
       }
       throw AuthenticationError;
     },
@@ -70,24 +76,31 @@ const resolvers = {
         };
       }
     },
-    addFriend: async (_, { friendInput }, context) => {
-      if (context.user) {
-        // Create a new Friend object with the appropriate data
-        const newFriend = new Friend({
-          // Populate this with the necessary fields
-          user: context.user.id,
-          // Other friend-related fields
-        });
+    // addFriend: async (_, { user1, user2 }, context) => {
+    //   if (context.user) {
+    //     // Create a new Friend object with the appropriate data
+    //     const newFriend = new Friend({
+    //       // Populate this with the necessary fields
+    //       user: context.user.id,
+    //       // Other friend-related fields
+    //     });
 
-        // Update the user's friends array
-        await User.findByIdAndUpdate(context.user.id, {
-          $push: { friends: newFriend },
-        });
+    //     // Update the user's friends array
+    //     await User.findByIdAndUpdate(context.user._id, {
+    //       $push: { friends: newFriend },
+    //     });
 
-        return newFriend;
-      }
+    //     return newFriend;
+    //   }
 
-      throw AuthenticationError;
+    //   throw AuthenticationError;
+    // },
+    addFriend: async (_, { myId, friendId }, context) => {
+      return (await User.findOneAndUpdate(
+        { _id: myId },
+        { $addToSet: { friends: friendId }},
+        {new: true }
+      )).populate("User")
     },
     sendMessage: (_, { username, content }) => {
       const newMessage = {
@@ -112,7 +125,7 @@ const resolvers = {
     createdAt: (message) => message.createdAt
   },
   User: {
-    id: (user) => user.id,
+    _id: (user) => user.id,
     username: (user) => user.username
   }
 };
