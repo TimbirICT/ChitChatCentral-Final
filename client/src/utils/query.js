@@ -6,22 +6,41 @@ export const QUERY_USER = gql`
       _id
       username
       email
+      friends {
+        _id
+        username
+      }
       messages {
         _id
         messageText
         createdAt
+        sender {
+          _id
+          username
+        }
+        recipient {
+          _id
+          username
+        }
       }
     }
   }
 `;
 
 export const QUERY_MESSAGES = gql`
-  query getMessage {
-    messages {
+  query messages($userId: ID!) {
+    messages(userId: $userId) {
       _id
       messageText
-      messageAuthor
       createdAt
+      sender {
+        _id
+        username
+      }
+      recipient {
+        _id
+        username
+      }
     }
   }
 `;
@@ -31,8 +50,15 @@ export const QUERY_SINGLE_MESSAGE = gql`
     message(messageId: $messageId) {
       _id
       messageText
-      messageAuthor
       createdAt
+      sender {
+        _id
+        username
+      }
+      recipient {
+        _id
+        username
+      }
     }
   }
 `;
@@ -43,11 +69,49 @@ export const QUERY_ME = gql`
       _id
       username
       email
+      friends {
+        _id
+        username
+      }
       messages {
         _id
         messageText
-        messageAuthor
         createdAt
+        sender {
+          _id
+          username
+        }
+        recipient {
+          _id
+          username
+        }
+      }
+    }
+  }
+`;
+
+export const ADD_FRIEND = gql`
+  mutation addFriend($friendId: ID!) {
+    addFriend(friendId: $friendId) {
+      _id
+      username
+    }
+  }
+`;
+
+export const SEND_MESSAGE = gql`
+  mutation sendMessage($recipientId: ID!, $messageText: String!) {
+    sendMessage(recipientId: $recipientId, messageText: $messageText) {
+      _id
+      messageText
+      createdAt
+      sender {
+        _id
+        username
+      }
+      recipient {
+        _id
+        username
       }
     }
   }

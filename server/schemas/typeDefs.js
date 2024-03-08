@@ -1,6 +1,6 @@
 const typeDefs = `
   type User {
-    _id: ID
+    _id: String
     username: String
     email: String
     password: String
@@ -31,7 +31,7 @@ const typeDefs = `
   type Mutation {
     createUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
-    addFriend(myId: ID!, friendId: ID!): User
+    addFriend(myId: String!, friendId: String!): User
     sendMessage(username: String!, content: String!): Message!
   }
   

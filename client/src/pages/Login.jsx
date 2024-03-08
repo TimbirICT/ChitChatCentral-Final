@@ -1,4 +1,3 @@
-import React from 'react';
 import { TypeAnimation } from 'react-type-animation';
 import Navbar from '../components/Navbar';
 
@@ -8,9 +7,10 @@ import { LOGIN_USER } from '../utils/mutations';
 import { Link } from 'react-router-dom';
 
 import Auth from '../utils/auth';
+import PropTypes from 'prop-types';
 
 
-const Login = () => {
+const Login = ({ updateUser }) => {
   const [formState, setFormState] = useState({ email: '', password: '' });
   const [login, { error, data }] = useMutation(LOGIN_USER);
 
@@ -27,23 +27,40 @@ const Login = () => {
   // submit form
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    console.log(formState);
+  
     try {
-      const { data } = await login({
+      const { data, errors } = await login({
         variables: { ...formState },
       });
-
-      Auth.login(data.login.token);
+  
+      console.log('GraphQL Response:', data);
+      console.log('GraphQL Errors:', errors);
+  
+      if (data && data.login && data.login.token) {
+        Auth.login(data.login.token);
+  
+        // If the updateUser function is available, call it with the user data
+        if (updateUser) {
+          updateUser(data.login.user);
+        }
+      } else {
+        console.error('Invalid response from the server:', data);
+      }
     } catch (e) {
-      console.error(e);
+      console.error('GraphQL Error:', e);
     }
-
+  
     // clear form values
     setFormState({
       email: '',
       password: '',
     });
   };
+
+Login.propTypes = {
+  updateUser: PropTypes.func.isRequired,
+};
+
 
   return (
     <div className="bg-gradient-to-br from-purple-900 via-purple-500 to-blue-400 min-h-screen">
