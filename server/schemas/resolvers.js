@@ -25,11 +25,10 @@ const resolvers = {
         id: String(messages.length + 1),
         user: { id: String(messages.length + 1), username },
         content,
-        createdAt: new Date().toISOString(),
+        createdAt: new Date().toISOString(), // Add createdAt field
       };
       messages.push(newMessage);
-      pubsub.publish('MESSAGE_SENT', { messageSent: newMessage});
-      // sendMessageToClients(newMessage); // Send the new message to all clients
+      pubsub.publish('MESSAGE_SENT', { messageSent: newMessage });
       return newMessage;
     },
   },
