@@ -15,6 +15,7 @@ import Friends from './pages/Friends';
 import Logout from './pages/Logout';
 import Signup from './pages/Signup';
 import AuthService from './utils/auth'; // Adjust the import path
+import updateUser from './pages/Login'; //
 
 const httpLink = createHttpLink({
   uri: '/graphql',
