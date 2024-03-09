@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import io from "socket.io-client";
 
 const Conversations = () => {
-  const { id: friendId } = useParams();
+  const { id: friendId, friendName: encodedFriendName } = useParams();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [socket, setSocket] = useState(null);
@@ -25,15 +25,9 @@ const Conversations = () => {
     setSocket(newSocket);
 
     const fetchFriendDetails = () => {
-      fetch(`YOUR_API_ENDPOINT/friends/${friendId}`)
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Friend details:", data); // Log friend details
-          setFriendName(data.name);
-        })
-        .catch((error) => {
-          console.error("Error fetching friend details:", error);
-        });
+      // Decode the friend name from URI
+      const decodedFriendName = decodeURIComponent(encodedFriendName);
+      setFriendName(decodedFriendName);
     };
 
     fetchFriendDetails();
@@ -41,7 +35,7 @@ const Conversations = () => {
     return () => {
       newSocket.disconnect();
     };
-  }, [friendId]);
+  }, [encodedFriendName]);
 
   const handleInputChange = (e) => {
     setNewMessage(e.target.value);
@@ -72,8 +66,8 @@ const Conversations = () => {
     }, 500);
   };
 
-  console.log("Friend ID:", friendId); // Log friendId
-  console.log("Friend Name:", friendName); // Log friendName
+  console.log("Friend ID:", friendId);
+  console.log("Friend Name:", friendName);
 
   return (
     <div>
