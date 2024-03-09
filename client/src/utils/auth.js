@@ -2,13 +2,18 @@ import { jwtDecode } from "jwt-decode";
 
 class AuthService {
   getProfile() {
-    return jwtDecode(this.getToken());
-  }
-
-  loggedIn() {
     const token = this.getToken();
-    // If there is a token and it's not expired, return `true`
-    return token && !this.isTokenExpired(token) ? true : false;
+  
+    if (!token) {
+      throw new Error('Token not available.');
+    }
+  
+    try {
+      return jwtDecode(token);
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      throw new Error('Error decoding token.');
+    }
   }
 
   isTokenExpired(token) {
