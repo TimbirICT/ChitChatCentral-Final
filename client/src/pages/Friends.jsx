@@ -33,8 +33,8 @@ const Friends = () => {
   };
 
   // Function to navigate to conversation page
-  const navigateToConversation = (friendId) => {
-    window.location.href = `/conversation/${friendId}`; // Navigate to conversation page with friendId
+  const navigateToConversation = (friendId, friendName) => {
+    window.location.href = `/conversation/${friendId}/${encodeURIComponent(friendName)}`;
   };
 
   // Function to search user by ID
@@ -110,11 +110,12 @@ const Friends = () => {
                   <img src={images.default} alt="Placeholder" className="w-24 h-24 rounded-full" />
                 )}
                 <div className="flex flex-col mt-2">
-                  <Link to={`/conversation/${friend.id}`}>
-                    <button className="border-2 border-black bg-white text-black px-4 py-2 rounded-md mb-2">
-                      Message
-                    </button>
-                  </Link>
+                  <button
+                    onClick={() => navigateToConversation(friend.id, friend.name)}
+                    className="border-2 border-black bg-white text-black px-4 py-2 rounded-md mb-2"
+                  >
+                    Message
+                  </button>
                 </div>
               </div>
               <div className="ml-4 flex-grow">

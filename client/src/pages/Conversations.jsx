@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import io from "socket.io-client";
 
-const Messages = () => {
+const Conversations = () => {
+  const { id: friendId, friendName: encodedFriendName } = useParams();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [socket, setSocket] = useState(null);
+  const [friendName, setFriendName] = useState("");
 
   useEffect(() => {
     const newSocket = io("http://localhost:3000/messages");
@@ -21,39 +24,39 @@ const Messages = () => {
 
     setSocket(newSocket);
 
+    const fetchFriendDetails = () => {
+      // Decode the friend name from URI
+      const decodedFriendName = decodeURIComponent(encodedFriendName);
+      setFriendName(decodedFriendName);
+    };
+
+    fetchFriendDetails();
+
     return () => {
       newSocket.disconnect();
     };
-  }, []);
+  }, [encodedFriendName]);
 
   const handleInputChange = (e) => {
     setNewMessage(e.target.value);
   };
 
-  const handleFriendMessageClick = (friendName) => {
-    setNewMessage(`Hey ${friendName}, let's chat!`);
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     if (newMessage.trim() === "") {
-      return; // Don't add empty messages
+      return;
     }
-  
-    // Update UI immediately
+
     setMessages((prevMessages) => [
       ...prevMessages,
       { sender: 'You', message: newMessage },
     ]);
-   
-    // Send the message to the server
+
     socket.emit("sendMessage", { sender: 'You', message: newMessage });
 
-    // Clear the input field
     setNewMessage("");
-  
-    // Simulate a response from the server (in this example, a simple echo)
+
     setTimeout(() => {
       const responseMessage = `You said: ${newMessage}`;
       setMessages((prevMessages) => [
@@ -63,23 +66,22 @@ const Messages = () => {
     }, 500);
   };
 
+  console.log("Friend ID:", friendId);
+  console.log("Friend Name:", friendName);
+
   return (
     <div>
       <Navbar />
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-500 to-blue-500">
         <div className="w-full max-w-2xl mx-auto mt-8 p-4 rounded-md shadow-md bg-gradient-to-br from-red-500 to-blue-500">
           <div className="mb-6">
-            <h2 className="text-2xl font-bold mb-4 text-white">Recent Messages</h2>
+            <h2 className="text-2xl font-bold mb-4 text-white">Chatting with {friendName}</h2>
             <div className="max-h-96 overflow-y-auto border border-gray-300 p-2 bg-white bg-opacity-50 rounded-md">
               {messages.length === 0 ? (
                 <p className="text-center text-gray-500">No messages yet.</p>
               ) : (
                 messages.map((message, index) => (
-                  <div
-                    key={index}
-                    className="p-2 text-sm cursor-pointer"
-                    onClick={() => handleFriendMessageClick(message.sender)}
-                  >
+                  <div key={index} className="p-2 text-sm">
                     <span className="font-bold">{message.sender}: </span>
                     {message.message}
                   </div>
@@ -96,7 +98,7 @@ const Messages = () => {
                 onChange={handleInputChange}
                 className="w-full border border-gray-300 p-2 rounded-md text-black"
                 style={{ color: "black" }}
-                placeholder="Type your message..."
+                placeholder={`Type your message to ${friendName}...`}
               />
             </label>
             <button
@@ -112,4 +114,4 @@ const Messages = () => {
   );
 };
 
-export default Messages;
+export default Conversations;
