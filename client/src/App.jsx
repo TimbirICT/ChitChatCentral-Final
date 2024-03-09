@@ -52,7 +52,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home user={user} />} />
           <Route path="/login" element={<Login updateUser={updateUser} />} />
-          <Route path="/conversations" element={<Conversations />} />
+          <Route path="/conversation/:id" element={<Conversations />} />
           <Route path="/friends" element={<Friends />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/signup" element={<Signup />} />
