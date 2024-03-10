@@ -29,7 +29,7 @@ const Home = ({ user }) => {
                 <h2 className="text-2xl font-extrabold mb-4 text-black">User Profile:</h2>
                 {/* Welcome Back, dynamic username */}
                 <p className="text-2xl font-bold" style={{ backgroundImage: 'linear-gradient(to right, #ff00cc, #333399)', WebkitBackgroundClip: 'text', color: 'transparent' }}>
-                  Welcome back, {user.data.email} (ID: {user.data._id})!
+                  Welcome back, {user.data.username}!
                 </p>
                 {/* User Profile Image and Edit Profile Button */}
                 <div className="flex items-center justify-between">
@@ -40,22 +40,6 @@ const Home = ({ user }) => {
                     Logout
                   </button>
                 </div>
-              </div>
-              {/* Recent Messages Section */}
-              <div className="border-b-2 border-gray-200 pb-4 mb-4">
-                <h2 className="text-2xl font-extrabold mb-4 text-black">Recent Messages</h2>
-                <ul>
-                  {recentMessages.map((message) => (
-                    <li key={message.id} className="mb-2">
-                      <div className="flex flex-col items-start max-w-sm">
-                        <div className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md">
-                          {message.message}
-                        </div>
-                        <p className="text-sm text-gray-600 mt-1">{message.sender}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
               </div>
               {/* Friends List Section */}
               <div>
