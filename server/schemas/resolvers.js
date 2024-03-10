@@ -133,23 +133,33 @@ const resolvers = {
     // },
     addFriend: async (_, { myId, friendId }, context) => {
       try {
-        const updatedUser = await User.findOneAndUpdate(
+        // Update the sender's friends array
+        const updatedSender = await User.findOneAndUpdate(
           { _id: myId },
           { $addToSet: { friends: friendId } },
           { new: true }
-        ).populate('friends'); // Populate the 'friends' field
+        );
     
-        if (!updatedUser) {
+        // Update the receiver's friends array
+        const updatedReceiver = await User.findOneAndUpdate(
+          { _id: friendId },
+          { $addToSet: { friends: myId } },
+          { new: true }
+        );
+    
+        if (!updatedSender || !updatedReceiver) {
           return {
             success: false,
-            message: 'User not found.',
+            message: 'One or both users not found.',
           };
         }
     
+        // Return the updated sender and receiver objects
         return {
           success: true,
           message: 'Friend added successfully.',
-          user: updatedUser.toObject(),
+          sender: updatedSender.toObject(),
+          receiver: updatedReceiver.toObject(),
         };
       } catch (error) {
         console.error('Error adding friend:', error);
