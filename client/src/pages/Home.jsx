@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import Auth from '../utils/auth';
 
 const Home = ({ user }) => {
-  console.log(user);
   const logout = (event) => {
     event.preventDefault();
     Auth.logout();
@@ -31,6 +30,10 @@ const Home = ({ user }) => {
                 <p className="text-2xl font-bold" style={{ backgroundImage: 'linear-gradient(to right, #ff00cc, #333399)', WebkitBackgroundClip: 'text', color: 'transparent' }}>
                   Welcome back, {user.data.username}!
                 </p>
+                <p className="text-2xl font-bold" style={{ backgroundImage: 'linear-gradient(to right, #ff00cc, #333399)', WebkitBackgroundClip: 'text', color: 'black' }}>
+                  Your User ID is {user.data._id}!
+                </p>
+
                 {/* User Profile Image and Edit Profile Button */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
