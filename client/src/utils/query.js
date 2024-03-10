@@ -24,6 +24,19 @@ export const QUERY_USER = gql`
         }
       }
     }
+    messages {
+      _id
+      messageText
+      createdAt
+      sender {
+        _id
+        username
+      }
+      recipient {
+        _id
+        username
+      }
+    }
   }
 `;
 
@@ -72,6 +85,7 @@ export const QUERY_ME = gql`
       friends {
         _id
         username
+        profilePic  
       }
       messages {
         _id
@@ -89,6 +103,7 @@ export const QUERY_ME = gql`
     }
   }
 `;
+
 
 export const ADD_FRIEND = gql`
   mutation addFriend($friendId: ID!) {
