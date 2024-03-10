@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/ChitChatDB');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/chitchat');
 
 module.exports = mongoose.connection;
