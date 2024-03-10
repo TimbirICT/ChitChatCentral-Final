@@ -1,12 +1,11 @@
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
-import { Link } from 'react-router-dom';
-import profileImage from '../assets/images/profile.jpg';
 import PropTypes from 'prop-types';
 
 import Auth from '../utils/auth';
 
 const Home = ({ user }) => {
+  console.log(user);
   const logout = (event) => {
     event.preventDefault();
     Auth.logout();
@@ -15,16 +14,6 @@ const Home = ({ user }) => {
   // Ensure user.messages and user.friends are defined
   const recentMessages = user.messages || [];
   const friendsList = user.friends || [];
-
-  Home.propTypes = {
-    user: PropTypes.shape({
-      _id: PropTypes.string,
-      username: PropTypes.string,
-      email: PropTypes.string,
-      messages: PropTypes.arrayOf(PropTypes.object),
-      friends: PropTypes.arrayOf(PropTypes.object),
-    }),
-  };
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-purple-600 to-indigo-600">
@@ -40,13 +29,12 @@ const Home = ({ user }) => {
                 <h2 className="text-2xl font-extrabold mb-4 text-black">User Profile:</h2>
                 {/* Welcome Back, dynamic username */}
                 <p className="text-2xl font-bold" style={{ backgroundImage: 'linear-gradient(to right, #ff00cc, #333399)', WebkitBackgroundClip: 'text', color: 'transparent' }}>
-                  Welcome back, {user.username}!
+                  Welcome back, {user.data.email} (ID: {user.data._id})!
                 </p>
                 {/* User Profile Image and Edit Profile Button */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    {/* Replace 'profileImage' with the actual path to the user's profile image */}
-                    <img src={user.profileImage} alt="Profile" className="h-22 w-22 rounded-full mr-3" />
+                    <img src="./src/assets/images/default_avatar.png" alt="Profile" className="h-20 md:h-24 lg:h-26 w-auto max-w-full rounded-full mr-3" />
                   </div>
                   <button className="btn btn-lg btn-light m-2" onClick={logout}>
                     Logout
@@ -92,6 +80,18 @@ const Home = ({ user }) => {
       </div>
     </div>
   );
+};
+
+Home.propTypes = {
+  user: PropTypes.shape({
+    data: PropTypes.shape({
+      username: PropTypes.string,
+      _id: PropTypes.string,
+      email: PropTypes.string,
+    }),
+    messages: PropTypes.arrayOf(PropTypes.object),
+    friends: PropTypes.arrayOf(PropTypes.object),
+  }),
 };
 
 export default Home;

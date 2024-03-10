@@ -3,18 +3,26 @@ import { jwtDecode } from "jwt-decode";
 class AuthService {
   getProfile() {
     const token = this.getToken();
-  
+
     if (!token) {
       throw new Error('Token not available.');
     }
-  
+
     try {
-      return jwtDecode(token);
+      const decoded = jwtDecode(token);
+
+      // Ensure that the decoded object has the expected structure
+      if (decoded && decoded.data) {
+        return decoded;
+      } else {
+        throw new Error('Invalid token structure.');
+      }
     } catch (error) {
       console.error('Error decoding token:', error);
       throw new Error('Error decoding token.');
     }
   }
+
 
   isTokenExpired(token) {
     // Decode the token to get its expiration time that was set by the server
