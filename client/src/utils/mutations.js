@@ -31,18 +31,20 @@ export const LOGIN_USER = gql`
 `;
 
 export const ADD_FRIEND = gql`
-  mutation addFriend($friendId: String!) {
-    addFriend(friendId: $friendId) {
+mutation AddFriend($myId: ID!, $friendId: ID!) {
+  addFriend(myId: $myId, friendId: $friendId) {
+    success
+    message
+    sender {
+      username
+      _id
+    }
+    receiver {
       _id
       username
-      email
-      friends {
-        _id
-        username
-      }
     }
   }
-`;
+}`
 
 export const REMOVE_FRIEND = gql`
   mutation removeFriend($friendId: String!) {

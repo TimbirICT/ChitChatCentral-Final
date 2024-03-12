@@ -20,7 +20,7 @@ const sendMessageToClients = (message) => {
 const resolvers = {
   Query: {
     users: async () => {
-      return await User.find();
+      return await User.find().populate('friends');
     },
 
     user: async (parent, { username }) => {
@@ -110,27 +110,6 @@ const resolvers = {
         };
       }
     },
-    
-    
-    // addFriend: async (_, { user1, user2 }, context) => {
-    //   if (context.user) {
-    //     // Create a new Friend object with the appropriate data
-    //     const newFriend = new Friend({
-    //       // Populate this with the necessary fields
-    //       user: context.user.id,
-    //       // Other friend-related fields
-    //     });
-
-    //     // Update the user's friends array
-    //     await User.findByIdAndUpdate(context.user._id, {
-    //       $push: { friends: newFriend },
-    //     });
-
-    //     return newFriend;
-    //   }
-
-    //   throw AuthenticationError;
-    // },
     addFriend: async (_, { myId, friendId }, context) => {
       try {
         // Update the sender's friends array
@@ -138,14 +117,18 @@ const resolvers = {
           { _id: myId },
           { $addToSet: { friends: friendId } },
           { new: true }
-        );
-    
+        ).populate('friends');
+
+        console.log("updatedSender", updatedSender);
+          
         // Update the receiver's friends array
         const updatedReceiver = await User.findOneAndUpdate(
           { _id: friendId },
           { $addToSet: { friends: myId } },
           { new: true }
-        );
+        ).populate('friends');
+
+        // console.log(friendId);
     
         if (!updatedSender || !updatedReceiver) {
           return {
@@ -158,8 +141,8 @@ const resolvers = {
         return {
           success: true,
           message: 'Friend added successfully.',
-          sender: updatedSender.toObject(),
-          receiver: updatedReceiver.toObject(),
+          sender: updatedSender,
+          receiver: updatedReceiver,
         };
       } catch (error) {
         console.error('Error adding friend:', error);
@@ -202,12 +185,12 @@ const setupWebSocketServer = (server) => {
   const io = require('socket.io')(server);
 
   io.on('connection', (socket) => {
-    console.log('New client connected:', socket.id);
+    // console.log('New client connected:', socket.id);
     clients.push(socket);
 
     // Remove client when disconnected
     socket.on('disconnect', () => {
-      console.log('Client disconnected:', socket.id);
+      // console.log('Client disconnected:', socket.id);
       clients = clients.filter((client) => client.id !== socket.id);
     });
   });
