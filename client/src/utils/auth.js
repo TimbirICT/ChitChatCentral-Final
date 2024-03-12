@@ -45,9 +45,12 @@ class AuthService {
     window.location.assign('/');
   }
 
-  logout() {
+ logout(navigate) {
     localStorage.removeItem('id_token');
-    window.location.reload();
+
+    setTimeout(() => {
+      navigate('/login');
+    }, 2000);
   }
 }
 

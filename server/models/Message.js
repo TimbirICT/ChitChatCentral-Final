@@ -1,22 +1,22 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const messageSchema = new mongoose.Schema({
   senderID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true
+    required: true,
   },
   receiverID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true
+    required: true,
   },
   message: {
     type: String,
-    required: true
+    required: true,
   },
 });
 
-const Message = mongoose.model('Messages', messageSchema);
+const Message = mongoose.model("Messages", messageSchema);
 
 export default Message;

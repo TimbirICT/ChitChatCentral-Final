@@ -1,36 +1,35 @@
-const express = require('express');
-const { ApolloServer } = require('@apollo/server');
-const { expressMiddleware } = require('@apollo/server/express4');
-const path = require('path');
-const { authMiddleware } = require('./utils/auth');
-const { typeDefs, resolvers } = require('./schemas');
-const { useServer } = require('graphql-ws/lib/use/ws');
-const { ApolloServerPluginDrainHttpServer } = require('@apollo/server/plugin/drainHttpServer');
-const { makeExecutableSchema } = require('@graphql-tools/schema');
-const { WebSocketServer } = require('ws');
+const express = require("express");
+const { ApolloServer } = require("@apollo/server");
+const { expressMiddleware } = require("@apollo/server/express4");
+const path = require("path");
+const { authMiddleware } = require("./utils/auth");
+const { typeDefs, resolvers } = require("./schemas");
+const { useServer } = require("graphql-ws/lib/use/ws");
+const {
+  ApolloServerPluginDrainHttpServer,
+} = require("@apollo/server/plugin/drainHttpServer");
+const { makeExecutableSchema } = require("@graphql-tools/schema");
+const { WebSocketServer } = require("ws");
 
 // Socket.io imports
-const http = require('http')
-const cors = require('cors');
+const http = require("http");
+const cors = require("cors");
 
-const db = require('./config/connection');
+const db = require("./config/connection");
 
 const PORT = process.env.PORT || 3001;
 const app = express();
 
-const httpServer = http.createServer(app)
-const io = require('socket.io')(httpServer, {
+const httpServer = http.createServer(app);
+const io = require("socket.io")(httpServer, {
   cors: {
-    origin: 'http://localhost:3000/conversations',
-    methods: ['GET', 'POST'],
-    credentials: true  // Allow cookies, if applicable
-  }
+    origin: "http://localhost:3000/conversations",
+    methods: ["GET", "POST"],
+    credentials: true, // Allow cookies, if applicable
+  },
 });
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
-// const apolloServer = new ApolloServer({
-//   schema,
-// });
 
 // Creating the WebSocket server
 const wsServer = new WebSocketServer({
@@ -38,7 +37,7 @@ const wsServer = new WebSocketServer({
   server: httpServer,
   // Pass a different path here if app.use
   // serves expressMiddleware at a different path
-  path: '/subscriptions',
+  path: "/subscriptions",
 });
 
 const server = new ApolloServer({
@@ -64,11 +63,9 @@ const server = new ApolloServer({
 // WebSocketServer start listening.
 const serverCleanup = useServer({ schema }, wsServer);
 
-
-io.on('connection', (socket) => {
-  console.log('a user connected', socket.id);
+io.on("connection", (socket) => {
+  console.log("a user connected", socket.id);
 });
-
 
 // Create a new instance of an Apollo server with the GraphQL schema
 const startApolloServer = async () => {
@@ -78,21 +75,24 @@ const startApolloServer = async () => {
   app.use(express.json());
 
   // Serve up static assets
-  app.use('/images', express.static(path.join(__dirname, '../client/images')));
+  app.use("/images", express.static(path.join(__dirname, "../client/public/assets/images")));
 
-  app.use('/graphql', expressMiddleware(server, {
-    context: authMiddleware
-  }));
+  app.use(
+    "/graphql",
+    expressMiddleware(server, {
+      context: authMiddleware,
+    })
+  );
 
-  if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../client/dist')));
+  if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, "../client/dist")));
 
-    app.get('*', (req, res) => {
-      res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+    app.get("*", (req, res) => {
+      res.sendFile(path.join(__dirname, "../client/dist/index.html"));
     });
   }
 
-  db.once('open', () => {
+  db.once("open", () => {
     app.listen(PORT, () => {
       console.log(`API server running on port ${PORT}!`);
       console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
