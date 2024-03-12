@@ -77,7 +77,7 @@ function App() {
               element={user ? <Home user={user} /> : <Navigate to="/login" />} />
             <Route path="/login" element={<Login updateUser={updateUser} />} />
             <Route path="/conversation/:id/:friendName" element={<Conversations />} />
-            <Route path="/friends" element={<Friends />} />
+            <Route path="/friends" element={<Friends loggedInUser={ user }/>} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/signup" element={<Signup />} />
           </Routes>

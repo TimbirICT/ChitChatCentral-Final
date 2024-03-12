@@ -24,19 +24,6 @@ export const QUERY_USER = gql`
         }
       }
     }
-    messages {
-      _id
-      messageText
-      createdAt
-      sender {
-        _id
-        username
-      }
-      recipient {
-        _id
-        username
-      }
-    }
   }
 `;
 

@@ -7,8 +7,22 @@ const Conversations = () => {
   const { id: friendId, friendName: encodedFriendName } = useParams();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [currentBotMessage, setNewBotMessage] = useState(0)
   const [socket, setSocket] = useState(null);
   const [friendName, setFriendName] = useState("");
+  // const botMessage = {
+  //   responses: {
+  //     first: 'Hey',
+  //     second: 'Almost finished, bro!',
+  //     third: `Check out our Github repo for this project https://github.com/TimbirICT/ChitChatCentral-Final`
+  //   }
+  // };
+
+  const botMessage = [
+    "Hey",
+    'Almost finished, bro!',
+    `Check out our Github repo for this project ${"https://github.com/TimbirICT/ChitChatCentral-Final"}`
+  ]
 
   useEffect(() => {
     const newSocket = io("http://localhost:3000/conversations");
@@ -57,13 +71,16 @@ const Conversations = () => {
 
     setNewMessage("");
 
-    setTimeout(() => {
-      const responseMessage = `You said: ${newMessage}`;
+    if(currentBotMessage < 3){
+      setTimeout(() => {
       setMessages((prevMessages) => [
         ...prevMessages,
-        { sender: 'Bot', message: responseMessage },
+        { sender: friendName, message: botMessage[currentBotMessage] },
       ]);
-    }, 500);
+    }, 5000);
+
+    setNewBotMessage(currentBotMessage + 1)
+    }
   };
 
   console.log("Friend ID:", friendId);
