@@ -1,24 +1,24 @@
 // App.jsx
-import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
   createHttpLink,
-} from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Conversations from './pages/Conversations';
-import Friends from './pages/Friends';
-import Logout from './pages/Logout';
-import Signup from './pages/Signup';
-import AuthService from './utils/auth'; // Adjust the import path
-import updateUser from './pages/Login'; //
+} from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Conversations from "./pages/Conversations";
+import Friends from "./pages/Friends";
+import Logout from "./pages/Logout";
+import Signup from "./pages/Signup";
+import AuthService from "./utils/auth"; // Adjust the import path
+import updateUser from "./pages/Login"; //
 
 const httpLink = createHttpLink({
-  uri: '/graphql',
+  uri: "/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -26,7 +26,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : '',
+      authorization: token ? `Bearer ${token}` : "",
     },
   };
 });
@@ -42,7 +42,7 @@ function App() {
 
   useEffect(() => {
     const token = AuthService.getToken();
-    console.log('Token:', token);
+    console.log("Token:", token);
     if (token && !AuthService.isTokenExpired(token)) {
       fetchUserData();
     } else {
@@ -51,15 +51,15 @@ function App() {
   }, []);
 
   const fetchUserData = () => {
-    console.log('Fetching user data...');
+    console.log("Fetching user data...");
     try {
       const profile = AuthService.getProfile();
-      console.log('User Profile:', profile);
+      console.log("User Profile:", profile);
       setUser(profile);
       setLoading(false);
     } catch (error) {
       // Handle error fetching user data
-      console.error('Error fetching user data:', error);
+      console.error("Error fetching user data:", error);
       AuthService.logout(); // Log out the user if an error occurs
       setLoading(false);
     }
@@ -74,10 +74,14 @@ function App() {
           <Routes>
             <Route
               path="/"
-              element={user ? <Home user={user} /> : <Navigate to="/login" />} />
+              element={user ? <Home user={user} /> : <Navigate to="/login" />}
+            />
             <Route path="/login" element={<Login updateUser={updateUser} />} />
-            <Route path="/conversation/:id/:friendName" element={<Conversations />} />
-            <Route path="/friends" element={<Friends loggedInUser={ user }/>} />
+            <Route
+              path="/conversation/:id/:friendName"
+              element={<Conversations />}
+            />
+            <Route path="/friends" element={<Friends loggedInUser={user} />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/signup" element={<Signup />} />
           </Routes>

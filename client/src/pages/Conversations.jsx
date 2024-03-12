@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import io from "socket.io-client";
@@ -7,22 +7,15 @@ const Conversations = () => {
   const { id: friendId, friendName: encodedFriendName } = useParams();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const [currentBotMessage, setNewBotMessage] = useState(0)
+  const [currentBotMessage, setNewBotMessage] = useState(0);
   const [socket, setSocket] = useState(null);
   const [friendName, setFriendName] = useState("");
-  // const botMessage = {
-  //   responses: {
-  //     first: 'Hey',
-  //     second: 'Almost finished, bro!',
-  //     third: `Check out our Github repo for this project https://github.com/TimbirICT/ChitChatCentral-Final`
-  //   }
-  // };
 
   const botMessage = [
     "Hey",
-    'Almost finished, bro!',
-    `Check out our Github repo for this project ${"https://github.com/TimbirICT/ChitChatCentral-Final"}`
-  ]
+    "Almost finished, bro!",
+    `Check out our Github repo for this project ${"https://github.com/TimbirICT/ChitChatCentral-Final"}`,
+  ];
 
   useEffect(() => {
     const newSocket = io("http://localhost:3000/conversations");
@@ -64,22 +57,22 @@ const Conversations = () => {
 
     setMessages((prevMessages) => [
       ...prevMessages,
-      { sender: 'You', message: newMessage },
+      { sender: "You", message: newMessage },
     ]);
 
-    socket.emit("sendMessage", { sender: 'You', message: newMessage });
+    socket.emit("sendMessage", { sender: "You", message: newMessage });
 
     setNewMessage("");
 
-    if(currentBotMessage < 3){
+    if (currentBotMessage < 3) {
       setTimeout(() => {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { sender: friendName, message: botMessage[currentBotMessage] },
-      ]);
-    }, 5000);
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { sender: friendName, message: botMessage[currentBotMessage] },
+        ]);
+      }, 5000);
 
-    setNewBotMessage(currentBotMessage + 1)
+      setNewBotMessage(currentBotMessage + 1);
     }
   };
 
@@ -92,7 +85,9 @@ const Conversations = () => {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-500 to-blue-500">
         <div className="w-full max-w-2xl mx-auto mt-8 p-4 rounded-md shadow-md bg-gradient-to-br from-red-500 to-blue-500">
           <div className="mb-6">
-            <h2 className="text-2xl font-bold mb-4 text-white">Chatting with {friendName}</h2>
+            <h2 className="text-2xl font-bold mb-4 text-white">
+              Chatting with {friendName}
+            </h2>
             <div className="max-h-96 overflow-y-auto border border-gray-300 p-2 bg-white bg-opacity-50 rounded-md">
               {messages.length === 0 ? (
                 <p className="text-center text-gray-500">No messages yet.</p>

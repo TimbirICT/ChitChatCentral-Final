@@ -1,22 +1,20 @@
-import React, { useState } from 'react';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import * as images from '../assets/images/index';
-import { Link } from 'react-router-dom';
+import { useState } from "react";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import * as images from "../assets/images/index";
 
 const Friends = () => {
   // Sample data for friends list
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [friends, setFriends] = useState([
-    { _id: 2, name: 'Dylan', online: true, profilePic: 'profile_Logo' },
-    { _id: 3, name: 'Jacob', online: true, profilePic: 'Jacob_Avatar' },
-    { _id: "65ed38a6e968a1702ffcd349", name: 'Timbir', online: true, profilePic: 'IMG_2894' },
-    { _id: 5, name: 'Jon', online: true, profilePic: 'jon_profile' },
-    { _id: "65efa2e64045e90b131d8108", name: 'Sara', online: true, profilePic: 'profile' }
+    { name: "Dylan", online: true, profilePic: "profile_Logo" },
+    { name: "Timbir", online: true, profilePic: "IMG_2894" },
+    { name: "Jon", online: true, profilePic: "jon_profile" },
+    { name: "Sara", online: true, profilePic: "profile" },
   ]);
 
-  const [searchedUser, setSearchedUser] = useState('');
-  const [searchedUserId, setSearchedUserId] = useState('');
+  const [searchedUser, setSearchedUser] = useState("");
+  const [searchedUserId, setSearchedUserId] = useState("");
 
   // Function to handle removing a friend
   const removeFriend = (friendId) => {
@@ -26,21 +24,27 @@ const Friends = () => {
 
   // Function to handle adding a friend
   const addFriend = () => {
-    if (searchedUser.trim() === '') return;
-    const newFriend = { id: friends.length + 1, name: searchedUser, online: false };
+    if (searchedUser.trim() === "") return;
+    const newFriend = {
+      id: friends.length + 1,
+      name: searchedUser,
+      online: false,
+    };
     setFriends([...friends, newFriend]);
-    setSearchedUser('');
-    setSearchedUserId('');
+    setSearchedUser("");
+    setSearchedUserId("");
   };
 
   // Function to navigate to conversation page
   const navigateToConversation = (friendId, friendName) => {
-    window.location.href = `/conversation/${friendId}/${encodeURIComponent(friendName)}`;
+    window.location.href = `/conversation/${friendId}/${encodeURIComponent(
+      friendName
+    )}`;
   };
 
   // Function to search user by ID
   const searchUserById = () => {
-    if (searchedUserId.trim() === '') return;
+    if (searchedUserId.trim() === "") return;
     // Logic to search for user by ID
     // Replace this with your actual search functionality
   };
@@ -54,29 +58,33 @@ const Friends = () => {
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-800 to-gray-200">
       <Navbar />
       <div className="container mx-auto py-6 flex-grow">
-        <div className="flex justify-between items-center mb-4">
-          <div>
-            <h2 className="text-7xl font-extrabold mb-2 text-white">Friends ({filteredFriends.length})</h2>
-            <div className="flex items-center">
+        <div className="mb-4 md:mb-6 lg:mb-8">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-2 text-white">
+            Friends ({filteredFriends.length})
+          </h2>
+          <div className="flex flex-col md:flex-row items-center">
+            <div className="flex flex-col md:flex-row items-center mb-4 md:mb-0">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search friends..."
-                className="border border-gray-300 px-4 py-2 rounded-md mr-4"
+                className="border border-gray-300 px-4 py-2 rounded-md mb-2 md:mb-0 md:mr-4"
               />
               <button
                 onClick={searchUserById}
-                className="border-2 border-gray-500 bg-gray-500 text-white px-4 py-2 rounded-md mr-4"
+                className="border-2 border-gray-500 bg-gray-500 text-white px-4 py-2 rounded-md"
               >
                 Search User
               </button>
+            </div>
+            <div className="flex flex-col md:flex-row items-center">
               <input
                 type="text"
                 value={searchedUserId}
                 onChange={(e) => setSearchedUserId(e.target.value)}
                 placeholder="Enter user ID..."
-                className="border border-gray-300 px-4 py-2 rounded-md mr-4"
+                className="border border-gray-300 px-4 py-2 rounded-md mb-2 md:mb-0 md:mr-4"
               />
               <button
                 onClick={addFriend}
@@ -85,12 +93,6 @@ const Friends = () => {
                 Add Friend
               </button>
             </div>
-          </div>
-          <div>
-            <a href="https://www.paypal.com/" target="_blank" rel="noopener noreferrer" className="flex items-center border-2 border-black bg-blue-800 text-white px-4 py-2 rounded-md">
-              <span className="border-b-2 border-black">Send Money through PayPal</span>
-              <span role="img" aria-label="Money" className="ml-2"> 💸</span>
-            </a>
           </div>
         </div>
         <div className="flex flex-col">
@@ -108,11 +110,17 @@ const Friends = () => {
                     className="w-24 h-24 rounded-full"
                   />
                 ) : (
-                  <img src={images.default} alt="Placeholder" className="w-24 h-24 rounded-full" />
+                  <img
+                    src={images.default}
+                    alt="Placeholder"
+                    className="w-24 h-24 rounded-full"
+                  />
                 )}
                 <div className="flex flex-col mt-2">
                   <button
-                    onClick={() => navigateToConversation(friend.id, friend.name)}
+                    onClick={() =>
+                      navigateToConversation(friend.id, friend.name)
+                    }
                     className="border-2 border-black bg-white text-black px-4 py-2 rounded-md mb-2"
                   >
                     Message
@@ -120,10 +128,18 @@ const Friends = () => {
                 </div>
               </div>
               <div className="ml-4 flex-grow">
-                <h3 className="text-2xl font-semibold italic text-white">{friend.name}</h3>
-                <div className={`w-4 h-4 rounded-full ${friend.online ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                <h3 className="text-2xl font-semibold italic text-white">
+                  {friend.name}
+                </h3>
+                <div
+                  className={`w-4 h-4 rounded-full ${
+                    friend.online ? "bg-green-500" : "bg-red-500"
+                  }`}
+                ></div>
               </div>
-              <p className="text-gray-300">Status: {friend.online ? 'Online' : 'Offline'}</p>
+              <p className="text-gray-300">
+                Status: {friend.online ? "Online" : "Offline"}
+              </p>
               <div className="absolute right-4 bottom-4">
                 <button
                   onClick={() => removeFriend(friend.id)}
