@@ -10,7 +10,7 @@ const Friends = () => {
   const [friends, setFriends] = useState([
     { _id: 2, name: 'Dylan', online: true, profilePic: 'profile_Logo' },
     { _id: 3, name: 'Jacob', online: true, profilePic: 'Jacob_Avatar' },
-    { _id: "65ed38a6e968a1702ffcd349", name: 'Timbir', online: true, profilePic: '' },
+    { _id: "65ed38a6e968a1702ffcd349", name: 'Timbir', online: true, profilePic: 'IMG_2894' },
     { _id: 5, name: 'Jon', online: true, profilePic: 'jon_profile' },
     { _id: "65efa2e64045e90b131d8108", name: 'Sara', online: true, profilePic: 'profile' }
   ]);
