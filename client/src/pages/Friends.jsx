@@ -30,7 +30,7 @@ const Friends = () => {
 
     try {
       const { data } = await addFriendMutation({
-        variables: { friendId: searchedUserId },
+        variables: {myId: currentUser._id, friendId: searchedUserId },
       });
 
       const newFriend = data.addFriend;

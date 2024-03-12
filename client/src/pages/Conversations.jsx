@@ -11,7 +11,7 @@ const Conversations = () => {
   const [friendName, setFriendName] = useState("");
 
   useEffect(() => {
-    const newSocket = io("http://localhost:3000/messages");
+    const newSocket = io("http://localhost:3000/conversations");
 
     newSocket.on("connect", () => {
       console.log("Connected to server");

@@ -21,7 +21,7 @@ const app = express();
 const httpServer = http.createServer(app)
 const io = require('socket.io')(httpServer, {
   cors: {
-    origin: 'http://localhost:3000/messages',
+    origin: 'http://localhost:3000/conversations',
     methods: ['GET', 'POST'],
     credentials: true  // Allow cookies, if applicable
   }

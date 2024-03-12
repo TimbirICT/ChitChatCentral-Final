@@ -1,6 +1,6 @@
 const typeDefs = `
   type User {
-    _id: String
+    _id: ID
     username: String
     email: String
     password: String
@@ -20,6 +20,13 @@ const typeDefs = `
     user: User
   }
   
+  type SpecialResponse {
+    success: Boolean
+    message: String
+    sender: User
+    receiver: User
+  }
+
   type Query {
     users: [User]!
     user(username: String!): User
@@ -31,7 +38,7 @@ const typeDefs = `
   type Mutation {
     createUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
-    addFriend(myId: String!, friendId: String!): User
+    addFriend(myId: ID!, friendId: ID!): SpecialResponse
     sendMessage(username: String!, content: String!): Message!
   }
   
